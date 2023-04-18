@@ -8,8 +8,8 @@ public class CustomProjectiles : MonoBehaviour
 
     [SerializeField] private DataWeapon dataWeapon;
 
-    
-    
+
+
 
     public bool activated;
 
@@ -22,7 +22,7 @@ public class CustomProjectiles : MonoBehaviour
     public GameObject explosion;
     public LayerMask whatIsEnemies;
 
-    
+
 
     [Header("Set the basic stats:")]
     [Range(0f, 1f)]
@@ -160,11 +160,10 @@ public class CustomProjectiles : MonoBehaviour
     void Start()
     {
 
-        speed = dataWeapon.VelocidadAtraccion;
-        magnetDistance = dataWeapon.MagnetismoDistancia;
-        maxLifetime = dataWeapon.Vidamaxima;
-        explodeOnTouch = dataWeapon.Explosioncontacto;
-        useGravity = dataWeapon.Gravedad;
+
+        StartCoroutine(ReloadScriptable());
+
+        
 
         Setup();
 
@@ -194,6 +193,9 @@ public class CustomProjectiles : MonoBehaviour
         if (timeBetweenVanishAndAppear > 0)
             currentTimeBetweenVanishAndAppear = timeBetweenVanishAndAppear;
     }
+
+
+
 
     /// Here are all functions called (except Setup), it works always the same,
     /// check if a specific requirement is fullfilled and if so, call the function
@@ -336,7 +338,7 @@ public class CustomProjectiles : MonoBehaviour
         if (objectToTp != null && tpOnEveryCollision) Pearl(transform.position);
 
         //Explode on touch
-        if (explodeOnTouch ) Explode();
+        if (explodeOnTouch && collision.collider.CompareTag("Enemy")) Explode();
 
         //Count up collisions
         collisions++;
@@ -603,7 +605,21 @@ public class CustomProjectiles : MonoBehaviour
         explosionDamage = _v;
     }
 
-   
+    IEnumerator ReloadScriptable()
+    {
+        yield return new WaitForSeconds(2f);
+
+        
+        speed = dataWeapon.VelocidadAtraccion;
+        magnetDistance = dataWeapon.MagnetismoDistancia;
+        maxLifetime = dataWeapon.Vidamaxima;
+        explodeOnTouch = dataWeapon.Explosioncontacto;
+        useGravity = dataWeapon.Gravedad;
+        
+        StartCoroutine(ReloadScriptable());
+        
+    }
+
 
     #endregion
 }

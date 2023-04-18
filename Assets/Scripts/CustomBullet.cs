@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 
 public class CustomBullet : MonoBehaviour
@@ -6,7 +8,7 @@ public class CustomBullet : MonoBehaviour
 
     [SerializeField] private DataWeapon dataWeapon;
 
-   
+
 
 
     //Assignables
@@ -35,13 +37,9 @@ public class CustomBullet : MonoBehaviour
     private void Start()
     {
 
-        explodeOnTouch = dataWeapon.Explosioncontacto;
-        useGravity = dataWeapon.Gravedad;
-
-
-    
-
-    Setup();
+        StartCoroutine(ReloadScriptable());
+        
+        Setup();
     }
 
     private void Update()
@@ -90,9 +88,17 @@ public class CustomBullet : MonoBehaviour
         collisions++;
 
         //Explode if bullet hits an enemy directly and explodeOnTouch is activated
-        
-    }
 
+    }
+    IEnumerator ReloadScriptable() {
+
+        yield return new WaitForSeconds(2f);
+
+        explodeOnTouch = dataWeapon.Explosioncontacto;
+        useGravity = dataWeapon.Gravedad;
+        StartCoroutine(ReloadScriptable());
+        Debug.Log("Actualizando");
+    }
     private void Setup()
     {
         //Create a new Physic material

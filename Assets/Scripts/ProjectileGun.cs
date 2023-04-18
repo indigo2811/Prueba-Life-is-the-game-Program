@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
-
+using System.Collections;
+using System.Collections.Generic;
 
 public class ProjectileGun : MonoBehaviour
 {
@@ -45,15 +46,12 @@ public class ProjectileGun : MonoBehaviour
     {
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        StartCoroutine(ReloadScriptable());
 
 
-        shootForce = dataWeapon.Fuerzadetiro;
-        upwardForce = dataWeapon.FuerzaElevación;
-        timeBetweenShooting = dataWeapon.Velocidadrafaga;
-        magazineSize = dataWeapon.Balas;
-        
 
-}
+
+    }
     void Update()
     {
         MyInput();
@@ -79,6 +77,20 @@ public class ProjectileGun : MonoBehaviour
             bulletsShot = bulletsPerTap;
             Shoot(); //Function has to be after bulletsShot = bulletsPerTap
         }
+    }
+
+    IEnumerator ReloadScriptable()
+    {
+        yield return new WaitForSeconds(2f);
+
+        shootForce = dataWeapon.Fuerzadetiro;
+        upwardForce = dataWeapon.FuerzaElevación;
+        timeBetweenShooting = dataWeapon.Velocidadrafaga;
+        magazineSize = dataWeapon.Balas;
+
+
+        StartCoroutine(ReloadScriptable());
+       
     }
     private void Shoot()
     {
@@ -153,6 +165,8 @@ public class ProjectileGun : MonoBehaviour
         bulletsLeft = magazineSize;
         reloading = false;
     }
+
+    
 
     #region Setters
 
